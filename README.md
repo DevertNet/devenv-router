@@ -1,6 +1,7 @@
-# devenv-router
+# 🌐 devenv-router
 
-With this project it is possible to start several devenv projects and use them under the same ports with different hostnames. Example:
+With this project it is possible to start several devenv projects and use them under the same ports with different hostnames.  
+Example:
 
 - example.devenv:80
 - nextproject.devenv:80
@@ -67,7 +68,7 @@ All services in your projects must be started with different ports. Otherwise, a
 
 ```sh
 # Clone the project to any location
-git clone ... /home/projects/devenv-router
+git clone https://github.com/DevertNet/devenv-router.git /home/projects/devenv-router
 
 # Jump into the folder
 cd /home/projects/devenv-router
@@ -89,3 +90,8 @@ devenv up
 2. In each of these folders `devenv info` is executed to search for the `DEVENV_ROUTER_*` variables. Projects with out `DEVENV_ROUTER_*` enviroment variables will ignored.
 3. A caddy file is built from the information and stored in `dist/Caddyfile`.
 4. The devenv caddy server with the reverse proxies is started.
+
+## Contribution
+
+Change requests or suggestions are welcome 😀.
+In principle, you can also use another language instead of bash scripts to create the caddy file. A rewrite of the project should be done quickly.

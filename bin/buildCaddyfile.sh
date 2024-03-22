@@ -6,6 +6,11 @@
 # Troubleshooting: 
 #  If you get "declare: -A: invalid option" -> Your bash version is to low.
 #
+# Development:
+#  To speedup testing you can test this script like this:
+#  devenv shell
+#  bash ./bin/buildCaddyfile.sh
+#
 
 # Get the absolute path of the script file e.g. /home/xxx/example.sh
 scriptPath=$(readlink -f "$0")
@@ -18,12 +23,15 @@ caddyfileTmpPath=$scriptDir/../dist/Caddyfile.tmp
 caddyfilePath=$scriptDir/../dist/Caddyfile
 
 # Import stuff
+source $scriptDir/imports/bashColor.sh
 source $scriptDir/imports/functions.sh
-source $scriptDir/imports//portMapping.sh
-source $scriptDir/imports//projectDirectoriesScan.sh
+source $scriptDir/imports/portMapping.sh
+source $scriptDir/imports/projectDirectoriesScan.sh
 
 # This will called at end of the file
 init() {
+    echoHelloScreen
+
     readEnvFile
     scanForProjectDirectories
     refreshTmpCaddyfile
@@ -33,6 +41,11 @@ init() {
     done
 
     moveTmpCaddyfile
+
+    echo ""
+    echoWithColor $COLOR_GREEN "🏁 Ready! The router will start soon..."
+    echo ""
+    echo ""
 }
 
 refreshTmpCaddyfile() {
@@ -52,16 +65,16 @@ moveTmpCaddyfile() {
 buildCaddyfileForDirectory() {
     directory=$1
     echo " "
-    echo "Processing directory: $directory"
+    echoWithColor $COLOR_GREEN "🏁 Processing directory: $directory"
 
-    echo "- Execute 'devenv info' to extract ENV variables"
+    echo " - Execute 'devenv info' to extract ENV variables"
     devenvInfoOutput=$(cd $directory && devenv info)
 
-    echo "- Extract environment variables from 'devenv info' output and generate Caddyfile string"
+    echo " - Extract environment variables from 'devenv info' output and generate Caddyfile string"
     caddyfileEntry=$(generateCaddyfileLines "$devenvInfoOutput")
     echo "$caddyfileEntry"
 
-    echo "- Write lines to temporary Caddyfile"
+    echo " - Write lines to temporary Caddyfile"
     echo "$caddyfileEntry" >> $caddyfileTmpPath
 }
 
