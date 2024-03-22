@@ -6,13 +6,13 @@ Example:
 - example.devenv:80
 - nextproject.devenv:80
 
-## How does it work?
+## ❓ How does it work?
 
 The services (e.g. Caddy, MySql etc.) of your projects will be started under different ports.
 devenv-router automatically reads the ports and starts a Caddy server with a reverse proxy.
 For example.devenv:80 is routed to 127.0.0.1:83723. In this case, 83723 is the HTTP port of the example project.
 
-## Restrictions
+## 🔑 Restrictions
 
 Only HTTP/s connections with the same ports can be routed. TCP connections (e.g. MySql) are only based on IPs.
 That means for all non HTTP applications please use the not so pretty port.
@@ -23,7 +23,7 @@ Currently only the following service will be reachable over the router:
 - Adminer (:8080)
 - More services can be added here: `bin/imports/portMapping.sh` (A PR would be nice)
 
-## Setup
+## 🧑‍💻 Setup
 
 The following things need to be changed so that everything works.
 
@@ -84,14 +84,14 @@ nano .env
 devenv up
 ```
 
-## What happens on `devenv up`?
+## 🤔 What happens on `devenv up`?
 
 1. All projects with a devenv.nix file are searched for in the SCAN_DIR folder (see .env).
 2. In each of these folders `devenv info` is executed to search for the `DEVENV_ROUTER_*` variables. Projects with out `DEVENV_ROUTER_*` enviroment variables will ignored.
 3. A caddy file is built from the information and stored in `dist/Caddyfile`.
 4. The devenv caddy server with the reverse proxies is started.
 
-## Contribution
+## ✋ Contribution
 
 Change requests or suggestions are welcome 😀.
 In principle, you can also use another language instead of bash scripts to create the caddy file. A rewrite of the project should be done quickly.
