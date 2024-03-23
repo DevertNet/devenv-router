@@ -84,6 +84,9 @@ generateCaddyfileLines() {
 
     # Loop over the keys of the array
     for key in "${!portMapping[@]}"; do
+        # This will hold the "external" protocol e.g. "http://"
+        routerProccessProtocol="${protocolMapping[$key]}"
+
         # This will hold the "external" port e.g. 80
         routerProccessPort="${portMapping[$key]}"
 
@@ -93,7 +96,7 @@ generateCaddyfileLines() {
         # Create a line when projectProccessPort is not 0
         if [ "$projectProccessPort" -ne 0 ]; then
             echo "
-                http://$domain:$routerProccessPort {
+                $routerProccessProtocol$domain:$routerProccessPort {
                     reverse_proxy 127.0.0.1:$projectProccessPort
                 }
             "

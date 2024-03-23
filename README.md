@@ -34,9 +34,14 @@ All services in your projects must be started with different ports. Otherwise, a
 `/home/projects/example/devenv.nix`
 
 ```nix
-{ lib }:
+{ lib, config, ... }:
 
 {
+  # This will add a entry to /etc/hosts
+  hosts = {
+    "example.devenv" = "127.0.0.1";
+  };
+
   # The env variables will hold the Port configuration.
   # In order not to annoy other developers, the standard
   # ports should be stored here. We overwrite the ports
@@ -55,12 +60,15 @@ All services in your projects must be started with different ports. Otherwise, a
 `/home/projects/example/devenv.local.nix`
 
 ```nix
-{ lib }:
+{ lib, ... }:
 
 {
   # Set an individual port per project for each
   # service. The port must not be used in any other project.
   env.DEVENV_ROUTER_PORT_ADMINER = lib.mkForce 28080;
+
+  # Change the Rest-API port for proccess-compose
+  env.PC_HTTP_PORT = 64635;
 }
 ```
 
@@ -81,10 +89,10 @@ cp .env.example .env
 nano .env
 
 # Start the router
-devenv up
+./start.sh
 ```
 
-## 🤔 What happens on `devenv up`?
+## 🤔 What happens on `devenv up` (`./start.sh`)?
 
 1. All projects with a devenv.nix file are searched for in the SCAN_DIR folder (see .env).
 2. In each of these folders `devenv info` is executed to search for the `DEVENV_ROUTER_*` variables. Projects with out `DEVENV_ROUTER_*` enviroment variables will ignored.
@@ -95,3 +103,8 @@ devenv up
 
 Change requests or suggestions are welcome 😀.
 In principle, you can also use another language instead of bash scripts to create the caddy file. A rewrite of the project should be done quickly.
+
+Todo:
+
+- (Automated) Tests
+- Remove workaround in `services.caddy.config` in file `devenv.nix`
