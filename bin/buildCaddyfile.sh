@@ -32,15 +32,21 @@ source $scriptDir/imports/projectDirectoriesScan.sh
 init() {
     echoHelloScreen
 
-    readEnvFile
-    scanForProjectDirectories
-    refreshTmpCaddyfile
+    if [ -f "dist/Caddyfile" ]; then
+        echoWithColor $COLOR_YELLOW "🏁 We found a generated Caddyfile. Do you want to update it? This take some time and is only necessary if projects or ports have been changed."
+    fi
 
-    for directory in "${projectDirectories[@]}"; do
-        buildCaddyfileForDirectory "$directory"
-    done
+    if [ ! -f "dist/Caddyfile" ] || askYesNo " Generate new Caddyfile?"; then
+        readEnvFile
+        scanForProjectDirectories
+        refreshTmpCaddyfile
 
-    moveTmpCaddyfile
+        for directory in "${projectDirectories[@]}"; do
+            buildCaddyfileForDirectory "$directory"
+        done
+
+        moveTmpCaddyfile
+    fi
 
     echo ""
     echoWithColor $COLOR_GREEN "🏁 Ready! The router will start soon..."
@@ -98,6 +104,7 @@ generateCaddyfileLines() {
             echo "
                 $routerProccessProtocol$domain:$routerProccessPort {
                     reverse_proxy 127.0.0.1:$projectProccessPort
+                    $(if [[ "$routerProccessProtocol" == "https://" ]]; then echo "tls internal"; fi)
                 }
             "
         fi

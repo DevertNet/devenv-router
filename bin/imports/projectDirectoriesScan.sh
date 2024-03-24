@@ -6,6 +6,7 @@ ignoreProjectDirectories=()
 scanForProjectDirectories() {
     fillIgnoreProjectDirectories
 
+    echo ""
     echoWithColor $COLOR_GREEN "🏁 Start scanning for devenv projects in $SCAN_DIR."
     echo " Found:"
     while IFS= read -r line; do

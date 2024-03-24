@@ -92,7 +92,7 @@ nano .env
 ./start.sh
 ```
 
-## 🤔 What happens on `devenv up` (`./start.sh`)?
+## 🤔 What happens on `./start.sh`?
 
 1. All projects with a devenv.nix file are searched for in the SCAN_DIR folder (see .env).
 2. In each of these folders `devenv info` is executed to search for the `DEVENV_ROUTER_*` variables. Projects with out `DEVENV_ROUTER_*` enviroment variables will ignored.
@@ -107,4 +107,3 @@ In principle, you can also use another language instead of bash scripts to creat
 Todo:
 
 - (Automated) Tests
-- Remove workaround in `services.caddy.config` in file `devenv.nix`
